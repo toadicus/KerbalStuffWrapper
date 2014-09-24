@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 
 // TODO: Robustify error-handling throughout.
+// TODO: Factor the upload stuff into a separate library.
 
 namespace KerbalStuff
 {

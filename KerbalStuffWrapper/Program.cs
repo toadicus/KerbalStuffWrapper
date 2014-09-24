@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using KerbalStuff;
 
+// TODO: Get rid of this whole file and compile as a library instead of an executable.
+
 namespace KSWUnitTest
 {
 	using KerbalStuff;
