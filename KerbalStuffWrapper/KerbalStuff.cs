@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
+// TODO: Robustify error-handling throughout.
+
 namespace KerbalStuff
 {
 	public static class KerbalStuff
@@ -16,6 +18,8 @@ namespace KerbalStuff
 
 		public const string UserAgent = "KerbalStuffWrapper by toadicus";
 
+		// TODO: Find a more useful return value for Login.
+		// TODO: Convert Login to use ExecutePostRequest.
 		public static void Login(string username, string password)
 		{
 			Dictionary<string, object> postParams = new Dictionary<string, object>();
@@ -31,6 +35,7 @@ namespace KerbalStuff
 			cookies = response.Cookies;
 		}
 
+		// TODO: Find a more useful return value for Create.
 		public static string Create(Mod mod, string fileName, string filePath)
 		{
 			if (mod == null)
@@ -83,6 +88,7 @@ namespace KerbalStuff
 			return string.Concat(RootUri, (currentJson as Dictionary<string, object>)["url"]);
 		}
 
+		// TODO: Find a more useful return value for Update.
 		public static string Update(long modId, ModVersion version, bool notifyFollowers, string fileName, string filePath)
 		{
 			if (version == null)
@@ -223,7 +229,7 @@ namespace KerbalStuff
 			ExecuteGetRequest(uri, action.RequestMethod, assignCookies);
 		}
 
-		private static void ExecuteGetRequest(string uri, string method, bool assignCookies, byte[] formData = null)
+		private static void ExecuteGetRequest(string uri, string method, byte[] formData = null)
 		{
 			currentJson = null;
 			currentRequest = null;
@@ -246,18 +252,14 @@ namespace KerbalStuff
 			currentRequest = (HttpWebRequest)WebRequest.Create(uri);
 			currentRequest.Method = method;
 
-			Console.WriteLine("Request cookies: " + currentRequest.CookieContainer);
-
-			currentResponse = (HttpWebResponse)currentRequest.GetResponse();
-
-			Console.WriteLine("Response cookies: " + string.Join(
-					",",
-					currentResponse.Cookies.Cast<Cookie>().Select(c => c.ToString()).ToArray()
-				));
-
-			if (currentResponse.StatusCode == HttpStatusCode.NotFound)
+			try
 			{
-				throw new WebException(string.Format("KerbalStuffWrapper.ExecuteRequest: URI not found: {0}", uri));
+				currentResponse = (HttpWebResponse)currentRequest.GetResponse();
+			}
+			catch (WebException ex)
+			{
+				currentResponse = ex.Response;
+				return false;
 			}
 
 			if (currentResponse.ContentType == "application/json")
@@ -268,9 +270,11 @@ namespace KerbalStuff
 
 				currentJson = Json.Deserialize(json);
 			}
+
+			return true;
 		}
 
-		private static void ExecutePostRequest(string uri, Dictionary<string, object> postParams, CookieCollection cookieCollection = null)
+		private static bool ExecutePostRequest(string uri, Dictionary<string, object> postParams, CookieCollection cookieCollection = null)
 		{
 			currentJson = null;
 			currentRequest = null;
@@ -297,8 +301,11 @@ namespace KerbalStuff
 			}
 			catch (WebException ex)
 			{
-				Console.WriteLine(string.Format("KerbalStuffWrapper.Create: Caught WebException.  Response: {0}", (new StreamReader(ex.Response.GetResponseStream())).ReadToEnd()));
+				currentResponse = ex.Response;
+				return false;
 			}
+
+			return true;
 		}
 
 		private static FormUpload.FileParameter ReadZipballParameter(string fileName, string filePath)

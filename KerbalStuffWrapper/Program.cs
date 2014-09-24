@@ -29,7 +29,7 @@ namespace KSWUnitTest
 			foreach (User user in KerbalStuff.UserSearch("toad"))
 			{
 				Console.WriteLine(user);
-			}*/
+			}
 
 			KerbalStuff.Login("toadicus", "redacted");
 
@@ -41,13 +41,14 @@ namespace KSWUnitTest
 				"MIT"
 			);
 
-			/*KerbalStuff.Create(
+			KerbalStuff.Create(
 				testMod,
 				"mod.zip",
 				"mod.zip"
-			);*/
+			);
 
 			KerbalStuff.Update(210, new ModVersion("0.3", "0.24.2", "changes changes changes!"), false, "mod.zip", "mod.zip");
+			*/
 
 			return 0;
 		}
