@@ -3,16 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalStuffWrapper", "KerbalStuffWrapper\KerbalStuffWrapper.csproj", "{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalStuffReadOnly", "KerbalStuffReadOnly\KerbalStuffReadOnly.csproj", "{720FA70F-D785-48ED-BA45-561921E0EEEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalStuff", "KerbalStuff\KerbalStuff.csproj", "{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}.Debug|x86.ActiveCfg = Debug|x86
+		{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}.Debug|x86.Build.0 = Debug|x86
+		{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}.Release|x86.ActiveCfg = Release|x86
+		{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}.Release|x86.Build.0 = Release|x86
 		{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}.Debug|x86.ActiveCfg = Debug|x86
 		{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}.Debug|x86.Build.0 = Debug|x86
 		{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}.Release|x86.ActiveCfg = Release|x86
 		{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}.Release|x86.Build.0 = Release|x86
+		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Debug|x86.ActiveCfg = Debug|x86
+		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Debug|x86.Build.0 = Debug|x86
+		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Release|x86.ActiveCfg = Release|x86
+		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = KerbalStuffWrapper\KerbalStuffWrapper.csproj

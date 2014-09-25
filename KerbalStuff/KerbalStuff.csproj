@@ -5,11 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1E93CDA7-56A8-410F-A5A2-0ABB9210CA58}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>KerbalStuff.Wrapper</RootNamespace>
-    <AssemblyName>KerbalStuffWrapper</AssemblyName>
-    <UseMSBuildEngine>False</UseMSBuildEngine>
+    <ProjectGuid>{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>KerbalStuff</RootNamespace>
+    <AssemblyName>KerbalStuff</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -20,8 +19,8 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
     <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
@@ -29,28 +28,22 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
     <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="CLAP">
-      <HintPath>..\..\CLAP.4.6\lib\net35\CLAP.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="KerbalStuffWrapper.cs" />
-    <Compile Include="Utils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KerbalStuff\KerbalStuff.csproj">
-      <Project>{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}</Project>
-      <Name>KerbalStuff</Name>
-    </ProjectReference>
     <ProjectReference Include="..\KerbalStuffReadOnly\KerbalStuffReadOnly.csproj">
       <Project>{720FA70F-D785-48ED-BA45-561921E0EEEC}</Project>
       <Name>KerbalStuffReadOnly</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Net" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KerbalStuff.cs" />
+    <Compile Include="FormUpload.cs" />
   </ItemGroup>
 </Project>
