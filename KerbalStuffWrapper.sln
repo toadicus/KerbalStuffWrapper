@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalStuffReadOnly", "Kerb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerbalStuff", "KerbalStuff\KerbalStuff.csproj", "{0CA12F64-AD3B-41E6-8A35-8781A8DAD1C1}"
 EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Packages", "Packages.mdproj", "{8D7818A4-B406-46CD-855D-88457014F717}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|Any CPU = Release|Any CPU
@@ -25,6 +27,8 @@ Global
 		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{720FA70F-D785-48ED-BA45-561921E0EEEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D7818A4-B406-46CD-855D-88457014F717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D7818A4-B406-46CD-855D-88457014F717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = KerbalStuffWrapper\KerbalStuffWrapper.csproj
