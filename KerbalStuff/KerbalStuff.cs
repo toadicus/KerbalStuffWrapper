@@ -232,7 +232,11 @@ namespace KerbalStuff
 					stream.Write(buffer, 0, bytesRead);
 				}
 
-				byte[] fileBytes = stream.GetBuffer();
+				stream.Seek(0, SeekOrigin.Begin);
+
+				byte[] fileBytes = new byte[stream.Length];
+
+				bytesRead = stream.Read(fileBytes, 0, (int)stream.Length);
 
 				return new FormUpload.FileParameter(fileBytes, fileName, "application/zip");
 			}
