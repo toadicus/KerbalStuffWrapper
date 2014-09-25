@@ -42,71 +42,110 @@ using System.Linq;
 
 namespace KerbalStuff
 {
+	/// <summary>
+	/// Class representing a KerbalStuff Mod as presented by the KerbalStuff API.
+	/// </summary>
 	public class Mod
 	{
-		public long downloads
+		/// <summary>
+		/// The number of times all versions of this Mod have been downloaded.
+		/// </summary>
+		public long Downloads
 		{
 			get;
 			private set;
 		}
 
-		public string name
+		/// <summary>
+		/// The name of the Mod.
+		/// </summary>
+		public string Name
 		{
 			get;
 			private set;
 		}
 
-		public long followers
+		/// <summary>
+		/// The number of followers subscribed to this Mod on KerbalStuff.
+		/// </summary>
+		public long Followers
 		{
 			get;
 			private set;
 		}
 
-		public string author
+		/// <summary>
+		/// The name of the <see cref="KerbalStuff.User"/> that authors this Mod.
+		/// </summary>
+		public string Author
 		{
 			get;
 			private set;
 		}
 
-		public long default_version_id
+		/// <summary>
+		/// The ID of the default <see cref="KerbalStuff.ModVersion"/> of this Mod.
+		/// </summary>
+		public long DefaultVersionId
 		{
 			get;
 			private set;
 		}
 
-		public List<ModVersion> versions
+		/// <summary>
+		/// A read-only list of the available versions of this Mod.
+		/// </summary>
+		/// <seealso cref="KerbalStuff.ModVersion"/>
+		public IList<ModVersion> Versions
+		{
+			get
+			{
+				return (versions == null) ? null : versions.AsReadOnly();
+			}
+		}
+
+		/// <summary>
+		/// The Id of this Mod on KerbalStuff.
+		/// </summary>
+		public long Id
 		{
 			get;
 			private set;
 		}
 
-		public long id
+		/// <summary>
+		/// A short (1000 characters or less) description of this Mod.
+		/// </summary>
+		public string ShortDescription
 		{
 			get;
 			private set;
 		}
 
-		public string short_description
+		/// <summary>
+		/// The name or title (128 characters or less) of the License under which this Mod is released.
+		/// </summary>
+		public string License
 		{
 			get;
 			private set;
 		}
 
-		public string license
-		{
-			get;
-			private set;
-		}
+		private List<ModVersion> versions;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.Mod"/> class from a Dictionary of JSON objects.
+		/// </summary>
+		/// <param name="jsonDict">Dictionary containing the deserialized JSON response from KerbalStuff.</param>
 		public Mod(Dictionary<string, object> jsonDict) : this()
 		{
-			this.downloads = (long)jsonDict["downloads"];
-			this.name = (string)jsonDict["name"];
-			this.followers = (long)jsonDict["followers"];
-			this.author = (string)jsonDict["author"];
-			this.default_version_id = (long)jsonDict["default_version_id"];
-			this.id = (long)jsonDict["id"];
-			this.short_description = (string)jsonDict["short_description"];
+			this.Downloads = (long)jsonDict["downloads"];
+			this.Name = (string)jsonDict["name"];
+			this.Followers = (long)jsonDict["followers"];
+			this.Author = (string)jsonDict["author"];
+			this.DefaultVersionId = (long)jsonDict["default_version_id"];
+			this.Id = (long)jsonDict["id"];
+			this.ShortDescription = (string)jsonDict["short_description"];
 
 			if (jsonDict.ContainsKey("versions"))
 			{
@@ -120,13 +159,23 @@ namespace KerbalStuff
 			}
 		}
 
-		public Mod(string name, string short_description, string version, string ksp_version, string license) : this()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.Mod"/> class from strings describing the Mod.
+		/// Useful for creating new Mods for upload.
+		/// </summary>
+		/// <seealso cref="KerbalStuff.KerbalStuff.Create"/>
+		/// <param name="name">The name of the Mod</param>
+		/// <param name="shortDescription">A short (1000 characters or less) description of this Mod.</param>
+		/// <param name="version">Version.</param>
+		/// <param name="kspVersion">Ksp version.</param>
+		/// <param name="license">The name or title (128 characters or less) of the License under which this Mod is released.</param>
+		public Mod(string name, string shortDescription, string version, string kspVersion, string license) : this()
 		{
-			this.name = name;
-			this.short_description = short_description;
-			this.license = license;
+			this.Name = name;
+			this.ShortDescription = shortDescription;
+			this.License = license;
 
-			this.versions.Add(new ModVersion(version, ksp_version));
+			this.versions.Add(new ModVersion(version, kspVersion));
 		}
 
 		private Mod()
@@ -134,69 +183,138 @@ namespace KerbalStuff
 			this.versions = new List<ModVersion>();
 		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="KerbalStuff.Mod"/>.
+		/// </summary>
 		public override string ToString()
 		{
-			return string.Format("Mod: {1}\nid: {6}\nauthor: {3}\ndownloads: {0}\nfollowers: {2}\nshort_description: {7}\ndefault_version_id: {4}\nversions:\n[\n{5}\n]\n", downloads, name, followers, author, default_version_id, string.Join("\n", versions.Select(v => v.ToString()).ToArray()), id, short_description);
+			return string.Format(
+				"Mod: {1}\n" +
+				"id: {6}\n" +
+				"author: {3}\n" +
+				"downloads: {0}\n" +
+				"followers: {2}\n" +
+				"short_description: {7}\n" +
+				"default_version_id: {4}\n" +
+				"versions:\n[\n{5}\n]\n",
+				Downloads,
+				Name,
+				Followers,
+				Author,
+				DefaultVersionId,
+				string.Join("\n", Versions.Select(v => v.ToString()).ToArray()),
+				Id,
+				ShortDescription
+			);
 		}
 	}
 
+	/// <summary>
+	/// Class representing a single version of a KerbalStuff Mod as presented by the KerbalStuff API.
+	/// </summary>
 	public class ModVersion
 	{
-		public string changelog
+		/// <summary>
+		/// An optional log describing the changes made in this ModVersion 
+		/// </summary>
+		public string ChangeLog
 		{
 			get;
 			private set;
 		}
 
-		public string ksp_version
+		/// <summary>
+		/// The primary version of KSP for which this ModVersion was developed.
+		/// </summary>
+		public string KspVersion
 		{
 			get;
 			private set;
 		}
 
-		public string download_path
+		/// <summary>
+		/// The path of the download archive for this ModVersion, relative to the KerbalStuff
+		/// root.
+		/// </summary>
+		/// <seealso cref="KerbalStuff.KerbalStuff.RootUri"/>
+		public string DownloadPath
 		{
 			get;
 			private set;
 		}
 
-		public long id
+		/// <summary>
+		/// The Id of this ModVersion on KerbalStuff.
+		/// </summary>
+		public long Id
 		{
 			get;
 			private set;
 		}
 
-		public string friendly_version
+		/// <summary>
+		/// The human-friendly (or not) name or number of this ModVersion.
+		/// </summary>
+		/// <value>The friendly version.</value>
+		public string FriendlyVersion
 		{
 			get;
 			private set;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.ModVersion"/> class from a Dictionary of JSON
+		/// objects.
+		/// </summary>
+		/// <param name="jsonDict">Dictionary containing the deserialized JSON response from KerbalStuff.</param>
 		public ModVersion(Dictionary<string, object> jsonDict) : this()
 		{
-			this.changelog = (string)jsonDict["changelog"];
-			this.ksp_version = (string)jsonDict["ksp_version"];
-			this.download_path = (string)jsonDict["download_path"];
-			this.id = (long)jsonDict["id"];
-			this.friendly_version = (string)jsonDict["friendly_version"];
+			this.ChangeLog = (string)jsonDict["changelog"];
+			this.KspVersion = (string)jsonDict["ksp_version"];
+			this.DownloadPath = (string)jsonDict["download_path"];
+			this.Id = (long)jsonDict["id"];
+			this.FriendlyVersion = (string)jsonDict["friendly_version"];
 		}
 
-		public ModVersion(string version, string ksp_version, string changelog) : this(version, ksp_version)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.ModVersion"/> class from strings describing the
+		/// Version.
+		/// </summary>
+		/// <param name="version">The human-friendly (or not) name or number of this ModVersion.</param>
+		/// <param name="kspVersion">The primary version of KSP for which this ModVersion was developed.</param>
+		/// <param name="changeLog">An optional log describing the changes made in this ModVersion </param>
+		public ModVersion(string version, string kspVersion, string changeLog) : this(version, kspVersion)
 		{
-			this.changelog = changelog;
+			this.ChangeLog = changeLog;
 		}
 
-		public ModVersion(string version, string ksp_version) : this()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.ModVersion"/> class from strings describing the
+		/// Version.
+		/// </summary>
+		/// <param name="version">The human-friendly (or not) name or number of this ModVersion.</param>
+		/// <param name="kspVersion">The primary version of KSP for which this ModVersion was developed.</param>
+		public ModVersion(string version, string kspVersion) : this()
 		{
-			this.friendly_version = version;
-			this.ksp_version = ksp_version;
+			this.FriendlyVersion = version;
+			this.KspVersion = kspVersion;
 		}
 
 		private ModVersion() {}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="KerbalStuff.ModVersion"/>.
+		/// </summary>
 		public override string ToString()
 		{
-			return string.Format("ModVersion {4}:\nid: {3}\nksp_version: {1}\ndownload_path: {2}\nchangelog: {0}", changelog, ksp_version, download_path, id, friendly_version);
+			return string.Format(
+				"ModVersion {4}:\nid: {3}\nksp_version: {1}\ndownload_path: {2}\nchangelog: {0}",
+				ChangeLog,
+				KspVersion,
+				DownloadPath,
+				Id,
+				FriendlyVersion
+			);
 		}
 	}
 }

@@ -48,12 +48,45 @@ namespace KerbalStuff
 {
 	public class KerbalStuffReadOnly
 	{
+		/// <summary>
+		/// The root URI of the KerbalStuff website, including protocol.
+		/// </summary>
 		public const string RootUri = "https://kerbalstuff.com";
 
+		/// <summary>
+		/// The URI of the KerbalStuff API, relative to the KerbalStuff root.
+		/// </summary>
+		/// <seealso cref="KerbalStuffReadOnly.RootUri"/>
 		public const string APIUri = RootUri + "/api";
 
-		public const string UserAgent = "KerbalStuffWrapper by toadicus";
+		private const string UserAgent = "KerbalStuffWrapper by toadicus";
 
+		/// <summary>
+		/// The response received from KerbalStuff after the current request.  Reset to null at the beginning of each
+		/// new request.
+		/// </summary>
+		public static HttpWebResponse currentResponse
+		{
+			get;
+			protected set;
+		}
+
+		/// <summary>
+		/// The List or Dictionary of deserialized JSON objects received from KerbalStuff after the current request.
+		/// Reset to null at the beginning of each new request.
+		/// </summary>
+		/// <value>The current json.</value>
+		public static object currentJson
+		{
+			get;
+			protected set;
+		}
+
+		/// <summary>
+		/// Queries KerbalStuff for the mod with the given Id, returning a <see cref="KerbalStuff.Mod"/> object,
+		/// or null if an error occured.
+		/// </summary>
+		/// <param name="modId">The Id of Mod to be queried on KerbalStuff.</param>
 		public static Mod ModInfo(long modId)
 		{
 			string uri = string.Format(KerbalStuffAction.ModInfo.UriFormat, modId);
@@ -70,6 +103,11 @@ namespace KerbalStuff
 			return mod;
 		}
 
+		/// <summary>
+		/// Queries KerbalStuff for the latest version of the mod with then given Id, returning a
+		/// <see cref="KerbalStuff.ModVersion"/> object, or null if an error occured.
+		/// </summary>
+		/// <param name="modId">The Id of the Mod to be queried on KerbalStuff.</param>
 		public static ModVersion ModLatest(long modId)
 		{
 			string uri = string.Format(KerbalStuffAction.ModLatest.UriFormat, modId);
@@ -86,6 +124,11 @@ namespace KerbalStuff
 			return ver;
 		}
 
+		/// <summary>
+		/// Searches KerbalStuff for a mod containing the given query string, returning a List of
+		/// <see cref="KerbalStuff.Mod"/> objects, or an empty List if none are found or an error occurs.
+		/// </summary>
+		/// <param name="query">The search query</param>
 		public static List<Mod> ModSearch(string query)
 		{
 			string uri = string.Format(KerbalStuffAction.ModSearch.UriFormat, query);
@@ -108,6 +151,11 @@ namespace KerbalStuff
 			return rList;
 		}
 
+		/// <summary>
+		/// Queries KerbalStuff for a user with the given username, returning a <see cref="KerbalStuff.User"/> object,
+		/// or null if an error occurs.
+		/// </summary>
+		/// <param name="username">The exact, case-sensitive username to query.</param>
 		public static User UserInfo(string username)
 		{
 			ExecuteGetRequest(KerbalStuffAction.UserInfo, false, username);
@@ -123,6 +171,12 @@ namespace KerbalStuff
 			return user;
 		}
 
+		/// <summary>
+		/// Searches KerbalStuff for a user containing the query string, returning a List of
+		/// <see cref="KerbalStuff.User"/> objects, or an empty List if none are found or an error occurs.
+		/// </summary>
+		/// <returns>The search.</returns>
+		/// <param name="query">Query.</param>
 		public static List<User> UserSearch(string query)
 		{
 			ExecuteGetRequest(KerbalStuffAction.UserSearch, false, query);
@@ -140,25 +194,7 @@ namespace KerbalStuff
 			return users;
 		}
 
-		public static HttpWebResponse currentResponse
-		{
-			get;
-			protected set;
-		}
-
-		public static CookieCollection cookies
-		{
-			get;
-			protected set;
-		}
-
 		protected static HttpWebRequest currentRequest;
-
-		public static object currentJson
-		{
-			get;
-			protected set;
-		}
 
 		protected static void ExecuteGetRequest(KerbalStuffAction action, bool assignCookies, params object[] formatArgs)
 		{

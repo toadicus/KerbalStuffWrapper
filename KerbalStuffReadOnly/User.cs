@@ -42,59 +42,91 @@ using System.Linq;
 
 namespace KerbalStuff
 {
+	/// <summary>
+	/// Class representing a KerbalStuff user as presented by the KerbalStuff API.
+	/// </summary>
 	public class User
 	{
-		public string username
+		/// <summary>
+		/// The user's KerbalStuff username.
+		/// </summary>
+		public string Username
 		{
 			get;
 			private set;
 		}
 
-		public string twitterUsername
+		/// <summary>
+		/// The user's Twitter username.
+		/// </summary>
+		public string TwitterUsername
 		{
 			get;
 			private set;
 		}
 
-		public List<Mod> mods
+		/// <summary>
+		/// A read-only list of <see cref="KerbalStuff.Mod"/> objects maintained by the user.
+		/// </summary>
+		public IList<Mod> Mods
+		{
+			get
+			{
+				return (this.mods == null) ? null : this.mods.AsReadOnly();
+			}
+		}
+
+		/// <summary>
+		/// The user's Reddit username.
+		/// </summary>
+		public string RedditUsername
 		{
 			get;
 			private set;
 		}
 
-		public string redditUsername
+		/// <summary>
+		/// The user's IRC nickname.
+		/// </summary>
+		public string IrcNick
 		{
 			get;
 			private set;
 		}
 
-		public string ircNick
+		/// <summary>
+		/// The user's profile description.
+		/// </summary>
+		public string Description
 		{
 			get;
 			private set;
 		}
 
-		public string description
+		/// <summary>
+		/// The user's KSP Forum username.
+		/// </summary>
+		public string ForumUsername
 		{
 			get;
 			private set;
 		}
 
-		public string forumUsername
-		{
-			get;
-			private set;
-		}
+		private List<Mod> mods;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.User"/> class from a dictionary of JSON objects.
+		/// </summary>
+		/// <param name="jsonDict">Dictionary containing the deserialized JSON response from KerbalStuff.</param>
 		public User(Dictionary<string, object> jsonDict) : this()
 		{
-			this.username = (string)jsonDict["username"];
-			this.twitterUsername = (string)jsonDict["twitterUsername"];
-			this.redditUsername = (string)jsonDict["redditUsername"];
-			this.ircNick = (string)jsonDict["ircNick"];
-			this.forumUsername = (string)jsonDict["forumUsername"];
+			this.Username = (string)jsonDict["username"];
+			this.TwitterUsername = (string)jsonDict["twitterUsername"];
+			this.RedditUsername = (string)jsonDict["redditUsername"];
+			this.IrcNick = (string)jsonDict["ircNick"];
+			this.ForumUsername = (string)jsonDict["forumUsername"];
 
-			this.description = (string)jsonDict["description"];
+			this.Description = (string)jsonDict["description"];
 
 			this.mods = new List<Mod>();
 
@@ -104,24 +136,33 @@ namespace KerbalStuff
 			}
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.User"/> class from an ambiguously-typed dictionary
+		/// of JSON objects.
+		/// </summary>
+		/// <param name="jsonDict">Dictionary containing the JSON response from KerbalStuff.</param>
 		public User(object jsonObj) : this((Dictionary<string, object>)jsonObj) {}
 
 		private User() {}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="KerbalStuff.User"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="KerbalStuff.User"/>.</returns>
 		public override string ToString()
 		{
 			return string.Format(
 				"User: username={0}, twitterUsername={1}, redditUsername={3}, ircNick={4}, description={5}, forumUsername={6}\nmods:\n{2}",
-				username,
-				twitterUsername,
+				Username,
+				TwitterUsername,
 				string.Join(
 					"\n",
-					mods.Select(m => m.ToString()).ToArray()
+					Mods.Select(m => m.ToString()).ToArray()
 				),
-				redditUsername,
-				ircNick,
-				description,
-				forumUsername
+				RedditUsername,
+				IrcNick,
+				Description,
+				ForumUsername
 			);
 		}
 	}

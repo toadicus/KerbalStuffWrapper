@@ -48,6 +48,24 @@ namespace KerbalStuff
 {
 	public class KerbalStuff : KerbalStuffReadOnly
 	{
+
+		/// <summary>
+		/// The cookies returned by KerbalStuff after a Login request, and assigned to successive Create and Update
+		/// requests.
+		/// </summary>
+		public static CookieCollection Cookies
+		{
+			get;
+			protected set;
+		}
+
+		/// <summary>
+		/// <para>Performs a Login request to KerbalStuff with the given username and password, returning a Dictionary of
+		/// deserialized JSON objects received from KerbalStuff after the request, or null if an error occurs.</para>
+		/// <para>Sets <see cref="KerbalStuff.KerbalStuff.Cookies"/> on success.</para>
+		/// </summary>
+		/// <param name="username">A valid KerbalStuff username, exact and case-sensitive.</param>
+		/// <param name="password">A valid KerbalStuff password associated with the username, exact and case-sensitive.</param>
 		public static Dictionary<string, object> Login(string username, string password)
 		{
 			string uri = KerbalStuffAction.Login.UriFormat;
@@ -60,7 +78,7 @@ namespace KerbalStuff
 
 			if (currentResponse.Cookies.Count > 0)
 			{
-				cookies = currentResponse.Cookies;
+				Cookies = currentResponse.Cookies;
 			}
 
 			if (currentJson != null && currentJson is Dictionary<string, object>)
@@ -71,6 +89,15 @@ namespace KerbalStuff
 			return null;
 		}
 
+		/// <summary>
+		/// <para>Performs a creation request to KerbalStuff, creating a new mod described by the given
+		/// <see cref="KerbalStuff.Mod"/> object and uploading the file with the given name and path.</para>
+		/// <para>Returns a Dictionary of deserialized JSON objects received from KerbalStuff after the request, or null
+		/// if an error occurs.</para>
+		/// </summary>
+		/// <param name="mod">The Mod to be created on KerbalStuff</param>
+		/// <param name="fileName">The name of the file to be uploaded</param>
+		/// <param name="filePath">The program-relative path of the file to be uploaded</param>
 		public static Dictionary<string, object> Create(Mod mod, string fileName, string filePath)
 		{
 			if (mod == null)
@@ -79,28 +106,28 @@ namespace KerbalStuff
 			}
 			else
 			{
-				if (mod.name == string.Empty)
+				if (mod.Name == string.Empty)
 					throw new ArgumentException("mod.name cannot be empty.");
-				if (mod.license == string.Empty)
+				if (mod.License == string.Empty)
 					throw new ArgumentException("mod.license cannot be empty.");
-				if (mod.short_description == string.Empty)
+				if (mod.ShortDescription == string.Empty)
 					throw new ArgumentException("mod.short_description cannot be empty.");
-				if (mod.versions.Count < 1)
+				if (mod.Versions.Count < 1)
 					throw new ArgumentException("mod must have a single version to create.");
-				else if (mod.versions[0] == null)
+				else if (mod.Versions[0] == null)
 				{
 					throw new ArgumentNullException("mod.versions[0] cannot be null.");
 				}
 				else
 				{
-					if (mod.versions[0].friendly_version == string.Empty)
+					if (mod.Versions[0].FriendlyVersion == string.Empty)
 						throw new ArgumentException("mod.versions[0].friendly_version cannot be empty.");
-					if (mod.versions[0].ksp_version == string.Empty)
+					if (mod.Versions[0].KspVersion == string.Empty)
 						throw new ArgumentException("mod.versions[0].ksp_version cannot be empty.");
 				}
 			}
 
-			if (cookies == null)
+			if (Cookies == null)
 			{
 				throw new Exception("KerbalStuffWrapper.Create: Must log in first.");
 			}
@@ -111,14 +138,14 @@ namespace KerbalStuff
 			}
 
 			Dictionary<string, object> postParams = new Dictionary<string, object>();
-			postParams.Add("name", mod.name);
-			postParams.Add("short-description", mod.short_description);
-			postParams.Add("license", mod.license);
-			postParams.Add("version", mod.versions[0].friendly_version);
-			postParams.Add("ksp-version", mod.versions[0].ksp_version);
+			postParams.Add("name", mod.Name);
+			postParams.Add("short-description", mod.ShortDescription);
+			postParams.Add("license", mod.License);
+			postParams.Add("version", mod.Versions[0].FriendlyVersion);
+			postParams.Add("ksp-version", mod.Versions[0].KspVersion);
 			postParams.Add("zipball", ReadZipballParameter(fileName, filePath));
 
-			ExecutePostRequest(KerbalStuffAction.Create.UriFormat, postParams, cookies);
+			ExecutePostRequest(KerbalStuffAction.Create.UriFormat, postParams, Cookies);
 
 			if (currentJson != null && currentJson is Dictionary<string, object>)
 			{
@@ -135,18 +162,30 @@ namespace KerbalStuff
 			return null;
 		}
 
+		/// <summary>
+		/// <para>Performs and Update request to KerbalStuff, uploading a new version described in the given
+		/// <see cref="KerbalStuff.ModVersion"/> of the mod with the given Id, uploading the file with the given name
+		/// and path.  KerbalStuff will notify followers of the mod if requested.</para>
+		/// <para>Returns a Dictionary of deserialized JSON objects received from KerbalStuff after the request, or null
+		/// if an error occurs.</para>
+		/// </summary>
+		/// <param name="modId">The Id of Mod to be updated on KerbalStuff.</param>
+		/// <param name="version">The ModVersion to be added to the Mod.</param>
+		/// <param name="notifyFollowers">If set to <c>true</c> KerbalStuff will notify followers of the mod.</param>
+		/// <param name="fileName">The name of the file to be uploaded</param>
+		/// <param name="filePath">The program-relative path of the file to be uploaded</param>
 		public static Dictionary<string, object> Update(long modId, ModVersion version, bool notifyFollowers, string fileName, string filePath)
 		{
 			if (version == null)
 			{
 				throw new ArgumentNullException("KerbalStuffWrapper.Update: version cannot be null");
 			}
-			if (version.friendly_version == string.Empty)
+			if (version.FriendlyVersion == string.Empty)
 				throw new ArgumentException("KerbalStuffWrapper.Update: version.friendly_version cannot be empty");
-			if (version.ksp_version == string.Empty)
+			if (version.KspVersion == string.Empty)
 				throw new ArgumentException("KerbalStuffWrapper.Update: version.ksp_version cannot be empty");
 
-			if (cookies == null)
+			if (Cookies == null)
 			{
 				throw new Exception("KerbalStuffWrapper.Update: Must log in first.");
 			}
@@ -159,19 +198,19 @@ namespace KerbalStuff
 			string uri = string.Format(KerbalStuffAction.Update.UriFormat, modId);
 
 			Dictionary<string, object> postParams = new Dictionary<string, object>();
-			postParams.Add("version", version.friendly_version);
-			postParams.Add("ksp-version", version.ksp_version);
+			postParams.Add("version", version.FriendlyVersion);
+			postParams.Add("ksp-version", version.KspVersion);
 
-			if (version.changelog != null && version.changelog != string.Empty)
+			if (version.ChangeLog != null && version.ChangeLog != string.Empty)
 			{
-				postParams.Add("changelog", version.changelog);
+				postParams.Add("changelog", version.ChangeLog);
 			}
 
 			postParams.Add("notify-followers", notifyFollowers ? "yes" : "no");
 
 			postParams.Add("zipball", ReadZipballParameter(fileName, filePath));
 
-			ExecutePostRequest(uri, postParams, cookies);
+			ExecutePostRequest(uri, postParams, Cookies);
 
 			if (currentJson != null && currentJson is Dictionary<string, object>)
 			{
