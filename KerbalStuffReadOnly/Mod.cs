@@ -167,8 +167,11 @@ namespace KerbalStuff
 			this.DefaultVersionId = (long)jsonDict["default_version_id"];
 			this.Id = (long)jsonDict["id"];
 			this.ShortDescription = (string)jsonDict["short_description"];
-			this.Background = (string)jsonDict["background"];
-			this.BackgroundVerticalOffset = (long)jsonDict["bg_offset_y"];
+			if (jsonDict.ContainsKey("background") && jsonDict["background"] != null)
+			{
+				this.Background = (string)jsonDict["background"];
+				this.BackgroundVerticalOffset = (long)jsonDict["bg_offset_y"];
+			}
 
 			if (jsonDict.ContainsKey("versions"))
 			{
