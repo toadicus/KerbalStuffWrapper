@@ -11,6 +11,7 @@
     <AssemblyName>KerbalStuffWrapper</AssemblyName>
     <UseMSBuildEngine>False</UseMSBuildEngine>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ReleaseVersion>Beta 1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -44,6 +45,7 @@
     <Compile Include="Utils.cs">
       <DeployService-Deploy>True</DeployService-Deploy>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KerbalStuff\KerbalStuff.csproj">

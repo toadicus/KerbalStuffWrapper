@@ -6,7 +6,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2CC7FF76-5C09-4329-92C1-DF48B954F1CE}</ProjectGuid>
     <Packages>
-      <Packages xmlns="">
+      <Packages>
         <Package name="Microsoft Windows Binaries">
           <Builder targetFile="KerbalStuffWrapper.zip" platform="Windows" configuration="Release" ctype="BinariesZipPackageBuilder">
             <ChildEntries>
@@ -19,5 +19,6 @@
         </Package>
       </Packages>
     </Packages>
+    <ReleaseVersion>Beta 1</ReleaseVersion>
   </PropertyGroup>
 </Project>

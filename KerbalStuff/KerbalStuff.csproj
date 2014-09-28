@@ -11,6 +11,7 @@
     <AssemblyName>KerbalStuff</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <UseMSBuildEngine>False</UseMSBuildEngine>
+    <ReleaseVersion>Beta 1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -46,5 +47,6 @@
   <ItemGroup>
     <Compile Include="KerbalStuff.cs" />
     <Compile Include="FormUpload.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>
