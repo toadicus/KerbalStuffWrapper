@@ -58,7 +58,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README" />
-    <None Include="LICENSE" />
+    <None Include="README">
+      <DeployService-Deploy>True</DeployService-Deploy>
+      <DeployService-RelativeDeployPath>README</DeployService-RelativeDeployPath>
+    </None>
+    <None Include="LICENSE">
+      <DeployService-Deploy>True</DeployService-Deploy>
+      <DeployService-RelativeDeployPath>LICENSE</DeployService-RelativeDeployPath>
+    </None>
   </ItemGroup>
 </Project>
