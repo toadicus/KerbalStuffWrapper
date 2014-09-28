@@ -240,7 +240,7 @@ namespace KerbalStuff.Wrapper
 				}
 				else if (createDict.ContainsKey("error") && createDict["error"].ToString().ToLower() == "true")
 				{
-					WriteErrorLine("Creation failed: {0}", createDict["message"]);
+					WriteErrorLine("Creation failed: {0}", createDict["reason"]);
 				}
 				else
 				{
@@ -310,7 +310,7 @@ namespace KerbalStuff.Wrapper
 				}
 				else if (updateDict.ContainsKey("error") && updateDict["error"].ToString().ToLower() == "true")
 				{
-					WriteErrorLine("Creation failed: {0}", updateDict["message"]);
+					WriteErrorLine("Creation failed: {0}", updateDict["reason"]);
 				}
 				else
 				{
