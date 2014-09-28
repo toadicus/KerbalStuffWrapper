@@ -1,17 +1,17 @@
 ﻿KerbalStuffWrapper
 
 Author:
-	toadicus
+        toadicus
 
 KerbalStuffWrapper is a suite of .NET-compatible utilities that provides access to the KerbalStuff API.  The suite is
 broken into three parts:
 
- *	KerbalStuffReadOnly.dll	-	A library implementing access to the documented, read-only KerbalStuff API members.
-								This should be suitable for use in KSP mods for version checking and other purposes.
-								Released under the BSD 2-Clause license.
- *	KerbalStuff.dll	-			A library implementing access to the document, read-write KerbalStuff API members.
-								Depends on and inherits from KerbalStuffReadOnly.dll.  This should be suitable for use
-								in external applications performing mod management for KerbalStuff users.  Released
-								under the BSD 2-Clause license.
- *	KerbalStuffWrapper.exe -	A proof-of-concept console application providing command-line access to all documented
-								KerbalStuff API members.  Released under the BSD 3-Clause license.
+ *	KerbalStuffReadOnly.dll	- A library implementing access to the documented, read-only KerbalStuff API members.
+                              This should be suitable for use in KSP mods for version checking and other purposes.
+                              Released under the BSD 2-Clause license.
+ *	KerbalStuff.dll	-         A library implementing access to the document, read-write KerbalStuff API members.
+                              Depends on and inherits from KerbalStuffReadOnly.dll.  This should be suitable for use
+                              in external applications performing mod management for KerbalStuff users.  Released
+                              under the BSD 2-Clause license.
+ *	KerbalStuffWrapper.exe -  A proof-of-concept console application providing command-line access to all documented
+                              KerbalStuff API members.  Released under the BSD 3-Clause license.

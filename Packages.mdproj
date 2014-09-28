@@ -19,6 +19,6 @@
         </Package>
       </Packages>
     </Packages>
-    <ReleaseVersion>Beta 1</ReleaseVersion>
+    <ReleaseVersion>Beta 2</ReleaseVersion>
   </PropertyGroup>
 </Project>
