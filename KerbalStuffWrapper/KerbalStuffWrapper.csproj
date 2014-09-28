@@ -55,4 +55,8 @@
       <Name>KerbalStuffReadOnly</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README" />
+    <None Include="LICENSE" />
+  </ItemGroup>
 </Project>

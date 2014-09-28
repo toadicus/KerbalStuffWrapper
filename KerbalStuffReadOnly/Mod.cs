@@ -35,6 +35,8 @@
 // This software uses the FormUpload multipart/form-data library,
 // http://www.briangrinstead.com/blog/multipart-form-post-in-c.
 //
+// KerbalStuff is copyright © 2014 Drew DeVault.  Used under license.
+//
 
 using System;
 using System.Collections.Generic;
@@ -114,6 +116,25 @@ namespace KerbalStuff
 		}
 
 		/// <summary>
+		/// The URI of the Mod's background image, relative to the mediacru.sh CDN root.
+		/// </summary>
+		public string Background
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Gets the vertical offset of the Mod's background image, in pixels.
+		/// </summary>
+		/// <value>The background vertical offset.</value>
+		public long BackgroundVerticalOffset
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// A short (1000 characters or less) description of this Mod.
 		/// </summary>
 		public string ShortDescription
@@ -146,6 +167,8 @@ namespace KerbalStuff
 			this.DefaultVersionId = (long)jsonDict["default_version_id"];
 			this.Id = (long)jsonDict["id"];
 			this.ShortDescription = (string)jsonDict["short_description"];
+			this.Background = (string)jsonDict["background"];
+			this.BackgroundVerticalOffset = (long)jsonDict["bg_offset_y"];
 
 			if (jsonDict.ContainsKey("versions"))
 			{

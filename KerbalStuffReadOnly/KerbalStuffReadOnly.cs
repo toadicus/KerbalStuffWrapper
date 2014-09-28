@@ -35,6 +35,18 @@
 // This software uses the FormUpload multipart/form-data library,
 // http://www.briangrinstead.com/blog/multipart-form-post-in-c.
 //
+// KerbalStuff is copyright © 2014 Drew DeVault.  Used under license.
+//
+
+/*
+ * PATH NOTE:
+ * 
+ * All partial URI path string should end without a slash, and begin with a slash or protocol identifier.
+ * 
+ * GOOD: "https://kerbalstuff.com", "/api", "/mod/{0:s}"
+ * 
+ * BAD:  "kerbalstuff.com/", "api", "mod/{0:s}"
+ * */
 
 using MiniJSON;
 using System;
@@ -46,6 +58,10 @@ using System.Text;
 
 namespace KerbalStuff
 {
+	/// <summary>
+	/// <para>Class of static methods for accessing the read-only elements of the KerbalStuff API.</para>
+	/// <para>https://github.com/KerbalStuff/KerbalStuff/blob/master/api.md</para>
+	/// </summary>
 	public class KerbalStuffReadOnly
 	{
 		/// <summary>
@@ -89,9 +105,7 @@ namespace KerbalStuff
 		/// <param name="modId">The Id of Mod to be queried on KerbalStuff.</param>
 		public static Mod ModInfo(long modId)
 		{
-			string uri = string.Format(KerbalStuffAction.ModInfo.UriFormat, modId);
-
-			ExecuteGetRequest(uri, KerbalStuffAction.ModInfo.RequestMethod);
+			ExecuteGetRequest(KerbalStuffAction.ModInfo, modId);
 
 			Mod mod = null;
 
@@ -110,9 +124,7 @@ namespace KerbalStuff
 		/// <param name="modId">The Id of the Mod to be queried on KerbalStuff.</param>
 		public static ModVersion ModLatest(long modId)
 		{
-			string uri = string.Format(KerbalStuffAction.ModLatest.UriFormat, modId);
-
-			ExecuteGetRequest(uri, KerbalStuffAction.ModLatest.RequestMethod);
+			ExecuteGetRequest(KerbalStuffAction.ModLatest, modId);
 
 			ModVersion ver = null;
 
@@ -131,9 +143,7 @@ namespace KerbalStuff
 		/// <param name="query">The search query</param>
 		public static List<Mod> ModSearch(string query)
 		{
-			string uri = string.Format(KerbalStuffAction.ModSearch.UriFormat, query);
-
-			ExecuteGetRequest(uri, KerbalStuffAction.ModSearch.RequestMethod);
+			ExecuteGetRequest(KerbalStuffAction.ModSearch, query);
 
 			List<Mod> rList = new List<Mod>();
 
@@ -158,7 +168,7 @@ namespace KerbalStuff
 		/// <param name="username">The exact, case-sensitive username to query.</param>
 		public static User UserInfo(string username)
 		{
-			ExecuteGetRequest(KerbalStuffAction.UserInfo, false, username);
+			ExecuteGetRequest(KerbalStuffAction.UserInfo, username);
 
 
 			User user = null;
@@ -179,7 +189,7 @@ namespace KerbalStuff
 		/// <param name="query">Query.</param>
 		public static List<User> UserSearch(string query)
 		{
-			ExecuteGetRequest(KerbalStuffAction.UserSearch, false, query);
+			ExecuteGetRequest(KerbalStuffAction.UserSearch, query);
 
 			List<User> users = new List<User>();
 
@@ -194,16 +204,29 @@ namespace KerbalStuff
 			return users;
 		}
 
+		/// <summary>
+		/// The current HTTP request delivered in an API action.  Reset to null at the beginning of each new action.
+		/// </summary>
 		protected static HttpWebRequest currentRequest;
 
-		protected static void ExecuteGetRequest(KerbalStuffAction action, bool assignCookies, params object[] formatArgs)
+		/// <summary>
+		/// Executes an HTTP GET request using the URI format from the specified
+		/// <see cref="KerbalStuff.KerbalStuffAction"/> and objects for inclusion in the formatted URI string.
+		/// </summary>
+		/// <param name="action">A KerbalStuffAction object describing the desired API action.</param>
+		/// <param name="formatArgs">Format arguments</param>
+		protected static void ExecuteGetRequest(KerbalStuffAction action, params object[] formatArgs)
 		{
 			string uri = string.Format(action.UriFormat, formatArgs);
 
-			ExecuteGetRequest(uri, action.RequestMethod);
+			ExecuteGetRequest(uri);
 		}
 
-		protected static void ExecuteGetRequest(string uri, string method)
+		/// <summary>
+		/// Executes an HTTP GET request to the specified uri.
+		/// </summary>
+		/// <param name="uri">Absolute URI</param>
+		protected static void ExecuteGetRequest(string uri)
 		{
 			currentJson = null;
 			currentRequest = null;
@@ -216,15 +239,9 @@ namespace KerbalStuff
 
 			uri = Uri.EscapeUriString(uri);
 
-			method = method.ToUpper();
-
-			if (method != "POST" && method != "GET")
-			{
-				throw new ArgumentOutOfRangeException("KerbalStuffWrapper.ExecuteRequest: method must be POST or GET.");
-			}
-
 			currentRequest = (HttpWebRequest)WebRequest.Create(uri);
-			currentRequest.Method = method;
+			currentRequest.Method = "GET";
+			currentRequest.UserAgent = UserAgent;
 
 			try
 			{
@@ -245,38 +262,82 @@ namespace KerbalStuff
 			}
 		}
 
+		/// <summary>
+		/// Constructor is protected to allow class inheritance, but the class is static and should not be instatiated.
+		/// </summary>
+		[Obsolete("Do not instantiate KerbalStuffReadOnly objects; all class members are static.")]
 		protected KerbalStuffReadOnly() {}
 	}
 
+	/// <summary>
+	/// Struct describing a KerbalStuff API action.
+	/// </summary>
 	public struct KerbalStuffAction
 	{
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff create API action.
+		/// </summary>
 		public static readonly KerbalStuffAction Create = new KerbalStuffAction("create", "/mod/create", "POST");
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff login API action.
+		/// </summary>
 		public static readonly KerbalStuffAction Login = new KerbalStuffAction("login", "/login", "POST");
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff mod/&lt;mod_id&gt; API action.
+		/// </summary>
 		public static readonly KerbalStuffAction ModInfo = new KerbalStuffAction("modinfo", "/mod/{0:d}", "GET");
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff mod/&lt;mod_id&gt;/latest API action.
+		/// </summary>
 		public static readonly KerbalStuffAction ModLatest = new KerbalStuffAction(
 			"modlatest",
 			"/mod/{0:d}/latest",
 			"GET"
 		);
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff search/mod API action.
+		/// </summary>
 		public static readonly KerbalStuffAction ModSearch = new KerbalStuffAction(
 			"modsearch",
 			"/search/mod?query={0}",
 			"GET"
 		);
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff update API action.
+		/// </summary>
 		public static readonly KerbalStuffAction Update = new KerbalStuffAction("update", "/mod/{0:d}/update", "POST");
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff user/&lt;username&gt; API action.
+		/// </summary>
 		public static readonly KerbalStuffAction UserInfo = new KerbalStuffAction("userinfo", "/user/{0}", "GET");
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff search/user API action.
+		/// </summary>
 		public static readonly KerbalStuffAction UserSearch = new KerbalStuffAction(
 			"usersearch",
 			"/search/user?query={0}",
 			"GET"
 		);
 
+		/// <summary>
+		/// The name of the action, currently unused.
+		/// </summary>
 		public string Action;
 
+		/// <summary>
+		/// A format string for generating a URI path relative to the KerbalStuff root URI.
+		/// </summary>
 		public string UriPathFormat;
 
+		/// <summary>
+		/// The HTTP request method, "GET" or "POST".
+		/// </summary>
 		public string RequestMethod;
 
+		/// <summary>
+		/// Read-only access to the absolute URI format string containing the protocol and KerbalStuff root URI.
+		/// </summary>
+		/// <value>The URI format.</value>
 		public string UriFormat
 		{
 			get
@@ -285,10 +346,24 @@ namespace KerbalStuff
 			}
 		}
 
-		public KerbalStuffAction(string action, string uriFormat, string requestMethod) : this()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KerbalStuff.KerbalStuffAction"/> struct.
+		/// </summary>
+		/// <param name="action">The name of the action, currently unused.</param>
+		/// <param name="uriPathFormat">A format string for generating a URI path relative to the KerbalStuff root URI.</param>
+		/// <param name="requestMethod">The HTTP request method, "GET" or "POST".</param>
+		public KerbalStuffAction(string action, string uriPathFormat, string requestMethod) : this()
 		{
+			requestMethod = requestMethod.ToUpper();
+
+			if (requestMethod != "GET" && requestMethod != "POST")
+			{
+				throw new ArgumentOutOfRangeException(
+					"KerbalStuffAction.ctor: 'requestMethod' must be one of \"GET\" or \"POST\"");
+			}
+
 			this.Action = action;
-			this.UriPathFormat = uriFormat;
+			this.UriPathFormat = uriPathFormat;
 			this.RequestMethod = requestMethod;
 		}
 	}

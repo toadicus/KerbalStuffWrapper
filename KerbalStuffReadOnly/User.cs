@@ -35,6 +35,8 @@
 // This software uses the FormUpload multipart/form-data library,
 // http://www.briangrinstead.com/blog/multipart-form-post-in-c.
 //
+// KerbalStuff is copyright © 2014 Drew DeVault.  Used under license.
+//
 
 using System;
 using System.Collections.Generic;
@@ -140,7 +142,7 @@ namespace KerbalStuff
 		/// Initializes a new instance of the <see cref="KerbalStuff.User"/> class from an ambiguously-typed dictionary
 		/// of JSON objects.
 		/// </summary>
-		/// <param name="jsonDict">Dictionary containing the JSON response from KerbalStuff.</param>
+		/// <param name="jsonObj">Dictionary containing the JSON response from KerbalStuff.</param>
 		public User(object jsonObj) : this((Dictionary<string, object>)jsonObj) {}
 
 		private User() {}

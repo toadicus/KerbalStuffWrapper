@@ -37,6 +37,8 @@
 // This software uses the FormUpload multipart/form-data library,
 // http://www.briangrinstead.com/blog/multipart-form-post-in-c.
 //
+// KerbalStuff is copyright © 2014 Drew DeVault.  Used under license.
+//
 
 using CLAP;
 using CLAP.Interception;

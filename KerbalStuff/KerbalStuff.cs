@@ -35,6 +35,8 @@
 // This software uses the FormUpload multipart/form-data library,
 // http://www.briangrinstead.com/blog/multipart-form-post-in-c.
 //
+// KerbalStuff is copyright © 2014 Drew DeVault.  Used under license.
+//
 
 using MiniJSON;
 using System;
@@ -46,6 +48,10 @@ using System.Text;
 
 namespace KerbalStuff
 {
+	/// <summary>
+	/// <para>Class of static methods for accessing the read-write elements of the KerbalStuff API.</para>
+	/// <para>https://github.com/KerbalStuff/KerbalStuff/blob/master/api.md</para>
+	/// </summary>
 	public class KerbalStuff : KerbalStuffReadOnly
 	{
 
@@ -62,7 +68,7 @@ namespace KerbalStuff
 		/// <summary>
 		/// <para>Performs a Login request to KerbalStuff with the given username and password, returning a Dictionary of
 		/// deserialized JSON objects received from KerbalStuff after the request, or null if an error occurs.</para>
-		/// <para>Sets <see cref="KerbalStuff.KerbalStuff.Cookies"/> on success.</para>
+		/// <para>Sets KerbalStuff.Cookies on success.</para>
 		/// </summary>
 		/// <param name="username">A valid KerbalStuff username, exact and case-sensitive.</param>
 		/// <param name="password">A valid KerbalStuff password associated with the username, exact and case-sensitive.</param>
@@ -220,6 +226,14 @@ namespace KerbalStuff
 			return null;
 		}
 
+		/// <summary>
+		/// Executes an HTTP post request to the given URI, including the given Dictionary of post parameters as
+		/// multipart/form-data.  If cookieCollection is not null, includes the given cookies as a part of the request.
+		/// <seealso cref="FormUpload"/>
+		/// </summary>
+		/// <param name="uri">Absolute URI</param>
+		/// <param name="postParams">String-keyed dictionary of objects to be serialized into multipart/form-data</param>
+		/// <param name="cookieCollection">Optional, cookies to be included with the request.</param>
 		protected static void ExecutePostRequest(string uri, Dictionary<string, object> postParams, CookieCollection cookieCollection = null)
 		{
 			currentJson = null;
@@ -257,6 +271,13 @@ namespace KerbalStuff
 			}
 		}
 
+		/// <summary>
+		/// Reads in the file at the given path and generates a FormUpload.FileParameter object for use in postParam
+		/// Dictionaries.
+		/// </summary>
+		/// <returns>The zipball parameter.</returns>
+		/// <param name="fileName">Name of the file to be read</param>
+		/// <param name="filePath">Program-relative path of the file to be read</param>
 		protected static FormUpload.FileParameter ReadZipballParameter(string fileName, string filePath)
 		{
 			using (FileStream file = File.OpenRead(filePath))
@@ -281,6 +302,10 @@ namespace KerbalStuff
 			}
 		}
 
+		/// <summary>
+		/// Constructor is protected to allow class inheritance, but the class is static and should not be instatiated.
+		/// </summary>
+		[Obsolete("Do not instantiate KerbalStuff objects; all class members are static.")]
 		protected KerbalStuff() {}
 	}
 }
