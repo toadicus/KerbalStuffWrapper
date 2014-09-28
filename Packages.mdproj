@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ItemType>PackagingProject</ItemType>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2CC7FF76-5C09-4329-92C1-DF48B954F1CE}</ProjectGuid>
+    <Packages>
+      <Packages xmlns="">
+        <Package name="Microsoft Windows Binaries">
+          <Builder targetFile="KerbalStuffWrapper.zip" platform="Windows" configuration="Release" ctype="BinariesZipPackageBuilder">
+            <ChildEntries>
+              <SolutionItemReference path="KerbalStuffWrapper\KerbalStuffWrapper.csproj" />
+              <SolutionItemReference path="KerbalStuffReadOnly\KerbalStuffReadOnly.csproj" />
+              <SolutionItemReference path="KerbalStuff\KerbalStuff.csproj" />
+            </ChildEntries>
+            <RootEntry path="KerbalStuffWrapper.sln" id=":root:" />
+          </Builder>
+        </Package>
+      </Packages>
+    </Packages>
+  </PropertyGroup>
+</Project>
