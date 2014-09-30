@@ -48,8 +48,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-// TODO: Write a console program that uses the KerbalStuff wrapper API.
-
 namespace KerbalStuff.Wrapper
 {
 	public class KerbalStuffWrapper
@@ -105,7 +103,62 @@ namespace KerbalStuff.Wrapper
 
 		private const string appName = "KerbalStuffWrapper";
 
-		// TODO: Action methods.
+		[Verb(Aliases = "featured,bf")]
+		public static void BrowseFeatured([DefaultValue(1)]long pageId)
+		{
+			List<Mod> mods = KerbalStuff.BrowseFeatured(pageId);
+
+			if (mods.Count < 1)
+			{
+				WriteOutLine("Query yielded no results.");
+			}
+			else
+			{
+				foreach (Mod mod in mods)
+				{
+					Console.WriteLine(mod);
+					Console.WriteLine();
+				}
+			}
+		}
+
+		[Verb(Aliases = "new,bn")]
+		public static void BrowseNew([DefaultValue(1)]long pageId)
+		{
+			List<Mod> mods = KerbalStuff.BrowseNew(pageId);
+
+			if (mods.Count < 1)
+			{
+				WriteOutLine("Query yielded no results.");
+			}
+			else
+			{
+				foreach (Mod mod in mods)
+				{
+					Console.WriteLine(mod);
+					Console.WriteLine();
+				}
+			}
+		}
+
+		[Verb(Aliases = "top,bt")]
+		public static void BrowseTop([DefaultValue(1)]long pageId)
+		{
+			List<Mod> mods = KerbalStuff.BrowseTop(pageId);
+
+			if (mods.Count < 1)
+			{
+				WriteOutLine("Query yielded no results.");
+			}
+			else
+			{
+				foreach (Mod mod in mods)
+				{
+					Console.WriteLine(mod);
+					Console.WriteLine();
+				}
+			}
+		}
 
 		[Verb(Aliases = "mod,m")]
 		public static void ModInfo([Required]long modId)

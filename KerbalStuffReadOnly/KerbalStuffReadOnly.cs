@@ -99,6 +99,81 @@ namespace KerbalStuff
 		}
 
 		/// <summary>
+		/// Queries KerbalStuff for a list of the curator-featured mods on the site, returning a List of
+		/// <see cref="KerbalStuff.Mod"/> objects, or an empty list if none are found or on an error.
+		/// </summary>
+		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
+		public static List<Mod> BrowseFeatured(long pageId = 1)
+		{
+			ExecuteGetRequest(KerbalStuffAction.BrowseFeatured, pageId);
+
+			List<Mod> mods = new List<Mod>();
+
+			if (currentJson != null && currentJson is List<object>)
+			{
+				foreach (var modObj in (currentJson as List<object>))
+				{
+					if (modObj is Dictionary<string, object>)
+					{
+						mods.Add(new Mod(modObj as Dictionary<string, object>));
+					}
+				}
+			}
+
+			return mods;
+		}
+
+		/// <summary>
+		/// Queries KerbalStuff for a list of the newest mods on the site, returning a List of
+		/// <see cref="KerbalStuff.Mod"/> objects, or an empty list if none are found or on an error.
+		/// </summary>
+		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
+		public static List<Mod> BrowseNew(long? pageId = null)
+		{
+			ExecuteGetRequest(KerbalStuffAction.BrowseNew, pageId);
+
+			List<Mod> mods = new List<Mod>();
+
+			if (currentJson != null && currentJson is List<object>)
+			{
+				foreach (var modObj in (currentJson as List<object>))
+				{
+					if (modObj is Dictionary<string, object>)
+					{
+						mods.Add(new Mod(modObj as Dictionary<string, object>));
+					}
+				}
+			}
+
+			return mods;
+		}
+
+		/// <summary>
+		/// Queries KerbalStuff for a list of the most popular mods on the site, returning a List of
+		/// <see cref="KerbalStuff.Mod"/> objects, or an empty list if none are found or on an error.
+		/// </summary>
+		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
+		public static List<Mod> BrowseTop(long? pageId = null)
+		{
+			ExecuteGetRequest(KerbalStuffAction.BrowseTop, pageId);
+
+			List<Mod> mods = new List<Mod>();
+
+			if (currentJson != null && currentJson is List<object>)
+			{
+				foreach (var modObj in (currentJson as List<object>))
+				{
+					if (modObj is Dictionary<string, object>)
+					{
+						mods.Add(new Mod(modObj as Dictionary<string, object>));
+					}
+				}
+			}
+
+			return mods;
+		}
+
+		/// <summary>
 		/// Queries KerbalStuff for the mod with the given Id, returning a <see cref="KerbalStuff.Mod"/> object,
 		/// or null if an error occured.
 		/// </summary>
@@ -274,6 +349,27 @@ namespace KerbalStuff
 	/// </summary>
 	public struct KerbalStuffAction
 	{
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff browse/new?page&lt;page_id&gt; API action.
+		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// </summary>
+		public static readonly KerbalStuffAction BrowseNew =
+			new KerbalStuffAction("browse/new", "/browse/new?page={0:d}", "GET");
+
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff browse/featured?page&lt;page_id&gt; API action.
+		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// </summary>
+		public static readonly KerbalStuffAction BrowseFeatured =
+			new KerbalStuffAction("browse/featured", "/browse/featured?page={0:d}", "GET");
+
+		/// <summary>
+		/// KerbalStuffAction object describing access to the KerbalStuff browse/top?page&lt;page_id&gt; API action.
+		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// </summary>
+		public static readonly KerbalStuffAction BrowseTop =
+			new KerbalStuffAction("browse/top", "/browse/top?page={0:d}", "GET");
+
 		/// <summary>
 		/// KerbalStuffAction object describing access to the KerbalStuff create API action.
 		/// </summary>
