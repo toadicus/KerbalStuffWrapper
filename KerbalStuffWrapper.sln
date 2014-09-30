@@ -195,6 +195,6 @@ Global
 		$27.NamingStyle = PascalCase
 		$27.IncludeInstanceMembers = True
 		$27.IncludeStaticEntities = True
-		version = Beta 2
+		version = Beta 3
 	EndGlobalSection
 EndGlobal

@@ -11,7 +11,7 @@
     <AssemblyName>KerbalStuff</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <UseMSBuildEngine>False</UseMSBuildEngine>
-    <ReleaseVersion>Beta 2</ReleaseVersion>
+    <ReleaseVersion>Beta 3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
