@@ -191,9 +191,9 @@ namespace KerbalStuff.Wrapper
 		}
 
 		[Verb(Aliases = "search,s")]
-		public static void ModSearch([Required]string query)
+		public static void ModSearch([Required]string query, [DefaultValue(1)]long pageId)
 		{
-			List<Mod> mods = KerbalStuff.ModSearch(query);
+			List<Mod> mods = KerbalStuff.ModSearch(query, pageId);
 
 			if (mods.Count < 1)
 			{
@@ -225,9 +225,9 @@ namespace KerbalStuff.Wrapper
 		}
 
 		[Verb(Aliases = "us")]
-		public static void UserSearch([Required]string query)
+		public static void UserSearch([Required]string query, [DefaultValue(1)]long pageId)
 		{
-			List<User> users = KerbalStuff.UserSearch(query);
+			List<User> users = KerbalStuff.UserSearch(query, pageId);
 
 			if (users.Count < 1)
 			{

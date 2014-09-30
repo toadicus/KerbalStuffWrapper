@@ -216,9 +216,10 @@ namespace KerbalStuff
 		/// <see cref="KerbalStuff.Mod"/> objects, or an empty List if none are found or an error occurs.
 		/// </summary>
 		/// <param name="query">The search query</param>
-		public static List<Mod> ModSearch(string query)
+		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
+		public static List<Mod> ModSearch(string query, long? pageId = null)
 		{
-			ExecuteGetRequest(KerbalStuffAction.ModSearch, query);
+			ExecuteGetRequest(KerbalStuffAction.ModSearch, query, pageId);
 
 			List<Mod> rList = new List<Mod>();
 
@@ -262,9 +263,10 @@ namespace KerbalStuff
 		/// </summary>
 		/// <returns>The search.</returns>
 		/// <param name="query">Query.</param>
-		public static List<User> UserSearch(string query)
+		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
+		public static List<User> UserSearch(string query, long? pageId = null)
 		{
-			ExecuteGetRequest(KerbalStuffAction.UserSearch, query);
+			ExecuteGetRequest(KerbalStuffAction.UserSearch, query, pageId);
 
 			List<User> users = new List<User>();
 
@@ -351,21 +353,21 @@ namespace KerbalStuff
 	{
 		/// <summary>
 		/// KerbalStuffAction object describing access to the KerbalStuff browse/new?page&lt;page_id&gt; API action.
-		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// &lt;page_id&gt; is indexed from 1, but zero, negative, and empty values evaluate as 1.
 		/// </summary>
 		public static readonly KerbalStuffAction BrowseNew =
 			new KerbalStuffAction("browse/new", "/browse/new?page={0:d}", "GET");
 
 		/// <summary>
 		/// KerbalStuffAction object describing access to the KerbalStuff browse/featured?page&lt;page_id&gt; API action.
-		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// &lt;page_id&gt; is indexed from 1, but zero, negative, and empty values evaluate as 1.
 		/// </summary>
 		public static readonly KerbalStuffAction BrowseFeatured =
 			new KerbalStuffAction("browse/featured", "/browse/featured?page={0:d}", "GET");
 
 		/// <summary>
 		/// KerbalStuffAction object describing access to the KerbalStuff browse/top?page&lt;page_id&gt; API action.
-		/// &lt;page_id&gt is indexed from 1, but zero, negative, and empty values evaluate as 1.
+		/// &lt;page_id&gt; is indexed from 1, but zero, negative, and empty values evaluate as 1.
 		/// </summary>
 		public static readonly KerbalStuffAction BrowseTop =
 			new KerbalStuffAction("browse/top", "/browse/top?page={0:d}", "GET");
@@ -395,7 +397,7 @@ namespace KerbalStuff
 		/// </summary>
 		public static readonly KerbalStuffAction ModSearch = new KerbalStuffAction(
 			"modsearch",
-			"/search/mod?query={0}",
+			"/search/mod?query={0}&page={1:d}",
 			"GET"
 		);
 		/// <summary>
@@ -411,7 +413,7 @@ namespace KerbalStuff
 		/// </summary>
 		public static readonly KerbalStuffAction UserSearch = new KerbalStuffAction(
 			"usersearch",
-			"/search/user?query={0}",
+			"/search/user?query={0}&page={1:d}",
 			"GET"
 		);
 
