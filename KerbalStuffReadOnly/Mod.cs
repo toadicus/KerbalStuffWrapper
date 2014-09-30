@@ -170,10 +170,14 @@ namespace KerbalStuff
 			if (jsonDict.ContainsKey("background") && jsonDict["background"] != null)
 			{
 				this.Background = (string)jsonDict["background"];
-				this.BackgroundVerticalOffset = (long)jsonDict["bg_offset_y"];
+
+				if (jsonDict.ContainsKey("bg_offset_y") && jsonDict["bg_offset_y"] != null)
+				{
+					this.BackgroundVerticalOffset = (long)jsonDict["bg_offset_y"];
+				}
 			}
 
-			if (jsonDict.ContainsKey("versions"))
+			if (jsonDict.ContainsKey("versions") && jsonDict["versions"] != null && jsonDict["versions"] is List<object>)
 			{
 				foreach (var ver in (jsonDict["versions"] as List<object>))
 				{
