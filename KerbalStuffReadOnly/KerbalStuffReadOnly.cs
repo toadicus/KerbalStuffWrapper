@@ -103,7 +103,7 @@ namespace KerbalStuff
 		/// <see cref="KerbalStuff.Mod"/> objects, or an empty list if none are found or on an error.
 		/// </summary>
 		/// <param name="pageId">Optional, 1-indexed page number.  Zero, negative, and empty values are evaluated as 1.</param>
-		public static List<Mod> BrowseFeatured(long pageId = 1)
+		public static List<Mod> BrowseFeatured(long? pageId = 1)
 		{
 			ExecuteGetRequest(KerbalStuffAction.BrowseFeatured, pageId);
 
